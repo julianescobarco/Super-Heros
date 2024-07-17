@@ -1,0 +1,51 @@
+[
+  {
+    "name": "${layer}-${stack_id}-ms-java-fargate",
+    "image": "${account_id}.dkr.ecr.${region}.amazonaws.com/${layer}-${stack_id}-service:latest",
+    "networkMode": "awsvpc",
+    "ulimits":  [{"HardLimit": ${hardLimit}, "Name": "${limitName}" ,"SoftLimit": ${softLimit}}],
+    "environment": [
+      {
+          "name": "LAYER",
+          "value": "${layer2}"
+      },
+      {
+          "name": "STACK",
+          "value": "${stack_id}"
+      }
+      {
+          "name": "DB_HOST",
+          "value": "${db_host}"
+      },
+      {
+            "name": "DB_PORT",
+            "value": "${db_port}"
+      },
+      {
+            "name": "DB_NAME",
+            "value": "${db_name}"
+      },
+      {
+            "name": "DB_LIMIT_CONNECTIONS",
+            "value": "${db_limit_connections}"
+      }
+    ],
+    "portMappings": [
+      {
+        "hostPort": 8080,
+        "containerPort": 8080
+      }
+    ],
+    "memory": ${task_memory},
+    "cpu": ${task_cpu},
+    "logConfiguration":
+    {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "/logs/ecs/${layer}-${stack_id}-service/tsk-log",
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "ecs"
+      }
+    }
+  }
+]
